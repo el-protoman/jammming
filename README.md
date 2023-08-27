@@ -36,3 +36,22 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## The purpose of your project
+Apply basic knowledge of HTML, CSS, JavaScript, React, HTTP Requests and Responses, and Authentication
+
+## Technologies used
+
+Frontend framework: NextJS
+API: Spotify https://developer.spotify.com/
+Deployment: Vercel
+IDE: Cursor
+
+## Features
+Search for songs on spotify
+Add and remove songs to playlist
+Save playlist to spotify
+
+## Future work
+Cleanup the frontend and make more user friendly
+Implement api for getting top 5 tracks of last 30 days, reccommend 5 songs based on top tracks, listen to songs in web app player
