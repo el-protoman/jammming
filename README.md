@@ -58,3 +58,6 @@ Preview songs in web player
 ## Future work
 +Cleanup the frontend and make more user friendly
 +add feature to add recommended tracks based on selected playlist tracks
++Only display songs not currently present in the playlist in the search results
++Add a loading screen while playlist is saving
++Ensure playlist information doesn’t get cleared if a user has to refresh their access token
