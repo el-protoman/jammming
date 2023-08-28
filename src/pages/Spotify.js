@@ -1,29 +1,34 @@
-const clientId = "046c082b14bc41eebf0a85ab6b7ba350";
-const redirectUri = "http://localhost:3000";
-let accessToken;
+import React, { Component } from 'react';
 
-const Spotify = {
+class Spotify extends Component {
+  constructor(props) {
+    super(props);
+    this.clientId = "046c082b14bc41eebf0a85ab6b7ba350";
+    this.redirectUri = "http://localhost:3000";
+    this.accessToken = null;
+  }
+
   getAccessToken() {
-    if (accessToken) {
-      return accessToken;
+    if (this.accessToken) {
+      return this.accessToken;
     }
     //check for access token match
     const accessTokenMatch = window.location.href.match(/access_token=([^&]*)/);
     const expiresInMatch = window.location.href.match(/expires_in=([^&]*)/);
     if (accessTokenMatch && expiresInMatch) {
-      accessToken = accessTokenMatch[1];
+      this.accessToken = accessTokenMatch[1];
       const expiresIn = Number(expiresInMatch[1]);
-      window.setTimeout(() => (accessToken = ""), expiresIn * 1000);
+      window.setTimeout(() => (this.accessToken = ""), expiresIn * 1000);
       window.history.pushState("Access Token", null, "/");
-      return accessToken;
+      return this.accessToken;
     } else {
-      const accessUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectUri}`;
+      const accessUrl = `https://accounts.spotify.com/authorize?client_id=${this.clientId}&response_type=token&scope=playlist-modify-public&redirect_uri=${this.redirectUri}`;
       window.location = accessUrl;
     }
-  },
+  }
 
   search(term) {
-    const accessToken = Spotify.getAccessToken();
+    const accessToken = this.getAccessToken();
     return fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     })
@@ -42,13 +47,13 @@ const Spotify = {
           uri: track.uri,
         }));
       });
-  },
+  }
 
   savePlaylist(name, trackUris) {
     if (!name || !trackUris.length) {
       return;
     }
-    const accessToken = Spotify.getAccessToken();
+    const accessToken = this.getAccessToken();
     const headers = { Authorization: `Bearer ${accessToken}` };
     let userId;
 
@@ -74,7 +79,11 @@ const Spotify = {
             );
           });
       });
-  },
-};
+  }
+
+  render() {
+    return null;
+  }
+}
 
 export default Spotify;

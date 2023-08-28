@@ -5,22 +5,27 @@ import SearchBar from '../components/SearchBar'
 import Playlist from '../components/Playlist'
 import Spotify from './Spotify'
 
+const spotify = new Spotify();
+
+
 // App component
 export default function App() {
   // Initialize state for search results
-  const [searchResults, setSearchResults] = useState([
-    { id: 1, name: 'Track 1', artist: 'Artist 1', album: 'Album 1', uri: 'http://spotify.com'},
-    { id: 2, name: 'Track 2', artist: 'Artist 2', album: 'Album 2' },
-  ]);
   
-  // Initialize state for playlist name and tracks
-  const [playlistName, setPlaylistName] = useState('My Playlist');
+  const [searchResults, setSearchResults] = useState([]);
+    const [playlistName, setPlaylistName] = useState('My Playlist');
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [playlistURIs, setPlaylistURIs] = useState([]);
 
+  // Fetch initial data when the component mounts
+  useEffect(() => {
+    // Fetch some initial data using a default search term or an empty term
+    updateSearchResults('');
+  }, []);
+
   // Function to update search results
   const updateSearchResults = async (term) => {
-    const newResults = await Spotify.search(term);
+    const newResults = await spotify.search(term);
     setSearchResults(newResults);
   };
   
@@ -49,7 +54,7 @@ export default function App() {
       // Ensure playlist name is provided
       return;
     }
-    Spotify.savePlaylist(playlistName, uris)
+    spotify.savePlaylist(playlistName, uris)
       .then(() => {
         // Playlist saved successfully, reset state
         setPlaylistTracks([]);
