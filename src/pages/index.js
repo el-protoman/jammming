@@ -18,6 +18,7 @@ export default function App() {
   const [playlistURIs, setPlaylistURIs] = useState([]);
   const [topTracks, setTopTracks] = useState([]);
   const [recommendedTracks, setRecommendedTracks] = useState([]);
+  const [currentTrack, setCurrentTrack] = useState(null); // Added state for current track
 
   // Fetch initial data when the component mounts
   useEffect(() => {
@@ -75,7 +76,7 @@ export default function App() {
   };
 
   const updateRecommendedTracks = async () => {
-    const recTracks = await getRecommendations(topTracks.map(track => track.id));
+    const recTracks = await spotify.getRecommendations(topTracks.map(track => track.id));
     setRecommendedTracks(recTracks);
   };
   
@@ -115,7 +116,18 @@ export default function App() {
           ))}
         </ul>
       </div>
-
+      {/* Embed Spotify Web Player */}
+      {currentTrack && (
+        <iframe 
+          src={`https://open.spotify.com/embed/track/${currentTrack}`} 
+          width="300" 
+          height="380" 
+          frameborder="0" 
+          allowtransparency="true" 
+          allow="encrypted-media">
+        </iframe>
+      )}
     </div>
   );
 }
+
