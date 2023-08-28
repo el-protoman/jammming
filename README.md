@@ -51,10 +51,10 @@ IDE: Cursor
 Search for songs on spotify
 Add and remove songs to playlist
 Save playlist to spotify
+Get top tracks in recent 30 days
+Get recommendations based on top tracks
+Preview songs in web player
 
 ## Future work
-+add exception handling for get recommendations when empty tracklist
 +Cleanup the frontend and make more user friendly
-+Display top tracks and recommended tracks as tracklist and track components with add to playlist feature
 +add feature to add recommended tracks based on selected playlist tracks
-+Implement api for listening to songs in web app player

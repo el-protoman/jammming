@@ -4,7 +4,7 @@ class Spotify extends Component {
   constructor(props) {
     super(props);
     this.clientId = "046c082b14bc41eebf0a85ab6b7ba350";
-    this.redirectUri = "https://jammming-dev.vercel.app/";
+    this.redirectUri = process.env.DEV ? "https://jammming-dev.vercel.app/" : "http://localhost:3000";
     this.accessToken = null;
   }
 
@@ -82,7 +82,7 @@ class Spotify extends Component {
     const headers = { Authorization: `Bearer ${accessToken}` };
     let userId;
 
-    return fetch("https://api.spotify.com/v1/me", { headers: headers }) // vaja kontrollida Spotify dok
+    return fetch("https://api.spotify.com/v1/me", { headers: headers })
       .then((response) => response.json())
       .then((jsonResponse) => {
         userId = jsonResponse.id;
@@ -101,7 +101,7 @@ class Spotify extends Component {
                 method: "POST",
                 body: JSON.stringify({ uris: trackUris }),
               }
-            );
+            ).then(()=> playlistId);
           });
       });
   }

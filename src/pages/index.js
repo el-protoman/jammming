@@ -1,57 +1,49 @@
 import React, { useState, useEffect } from 'react';
-import styles from '../styles/Home.module.css'
-import SearchResults from '../components/SearchResults'
-import SearchBar from '../components/SearchBar'
-import Playlist from '../components/Playlist'
-import Spotify from './Spotify'
+import styles from '../styles/Home.module.css';
+import Spotify from './Spotify';
+import Header from '../components/Header';
+import MainContent from '../components/MainContent';
+import Player from '../components/Player';
 
 const spotify = new Spotify();
 
-
 // App component
 export default function App() {
-  // Initialize state for search results
-  
   const [searchResults, setSearchResults] = useState([]);
   const [playlistName, setPlaylistName] = useState('My Playlist');
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [playlistURIs, setPlaylistURIs] = useState([]);
   const [topTracks, setTopTracks] = useState([]);
   const [recommendedTracks, setRecommendedTracks] = useState([]);
-  const [currentTrack, setCurrentTrack] = useState(null); // Added state for current track
+  const [currentTrack, setCurrentTrack] = useState(null);
+  const [newPlaylist, setNewPlaylist] = useState(null);
 
-  // Fetch initial data when the component mounts
   useEffect(() => {
-    // Fetch some initial data using a default search term or an empty term
     updateSearchResults('');
   }, []);
 
   useEffect(() => {
-    // Set current track as the URI of the first in the list of recommended tracks
     if (recommendedTracks.length > 0) {
-      setCurrentTrack(recommendedTracks[0].uri);
+      const trackURI = recommendedTracks[0].uri;
+      const trackID = trackURI.split(':').pop();
+      setCurrentTrack(trackID);
     }
   }, [recommendedTracks]);
 
-
-  // Function to update search results
-  const updateSearchResults = async (term) => {
-    const newResults = await spotify.search(term);
-    setSearchResults(newResults);
-  };
-  
-  // Function to update playlist name
-  const updatePlaylistName = (name) => {
-    setPlaylistName(name);
-  };
-
-  // Function to add a track to the playlist
   const addTrackToPlaylist = (track) => {
     if (!playlistTracks.some((t) => t.id === track.id)) {
       setPlaylistTracks([...playlistTracks, track]);
     }
   };
 
+  const updateSearchResults = async (term) => {
+    const newResults = await spotify.search(term);
+    setSearchResults(newResults);
+  };
+
+  const updatePlaylistName = (name) => {
+    setPlaylistName(name);
+  };
 
   const removeTrackFromPlaylist = (track) => {
     const updatedTracks = playlistTracks.filter((t) => t.id !== track.id);
@@ -59,22 +51,21 @@ export default function App() {
   };
 
   const savePlaylist = () => {
-    const uris = playlistTracks.map(track => track.uri);
+    const uris = playlistTracks.map((track) => track.uri);
     setPlaylistURIs(uris);
     if (!playlistName) {
-      // Ensure playlist name is provided
       return;
     }
-    spotify.savePlaylist(playlistName, uris)
-      .then(() => {
-        // Playlist saved successfully, reset state
+    spotify
+      .savePlaylist(playlistName, uris)
+      .then((playlistId) => {
         setPlaylistTracks([]);
         setPlaylistName('New Playlist');
         setPlaylistURIs([]);
+        setNewPlaylist(playlistId);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error saving playlist:', error);
-        // Handle the error as needed
       });
   };
 
@@ -84,69 +75,31 @@ export default function App() {
   };
 
   const updateRecommendedTracks = async () => {
-    const recTracks = await spotify.getRecommendations(topTracks.map(track => track.id));
-    setRecommendedTracks(recTracks);
-    console.log(recTracks)
+    if (topTracks.length > 0) {
+      const recTracks = await spotify.getRecommendations(topTracks.map((track) => track.id));
+      setRecommendedTracks(recTracks);
+    }
   };
-  
+
   return (
-    <div className={styles.main}>
-      <h1>JaMMMing</h1>
-      <SearchBar onSearch={updateSearchResults} />
-      <div className={styles.sub}>
-        <SearchResults tracks={searchResults} onAdd={addTrackToPlaylist} />
-        <Playlist 
-          playlistName={playlistName} 
-          playlistTracks={playlistTracks} 
-          onNameChange={updatePlaylistName} 
-          onRemove={removeTrackFromPlaylist}
-          playlistURIs={playlistURIs}
-        />
-      </div>
-      <button onClick={savePlaylist}>SAVE TO SPOTIFY</button>
-      <button onClick={updateTopTracks}>Get Top Tracks</button>
-      <div className={styles.topTracks}>
-        <h3>Top Tracks</h3>
-        <ul>
-          {topTracks.map(track => (
-            <li key={track.id}>{track.name}</li>
-          ))}
-        </ul>
-      </div>
-      <button onClick={updateRecommendedTracks}>Get Recommendations</button>
-      <div className={styles.recommendedTracks}>
-        <h3>Recommended Tracks</h3>
-        <ul>
-          {recommendedTracks.map(track => (
-            <li key={track.id}>
-              {`${track.name} by ${track.artists.map(artist => artist.name).join(', ')}`}
-              <button onClick={() => addTrackToPlaylist(track)}>Add</button>
-            </li>
-          ))}
-        </ul>
-      </div>
-      {/* Embed Spotify Web Player */}
-      {currentTrack && (
-        <iframe 
-          src={`https://open.spotify.com/embed/track/${currentTrack}`} 
-          width="300" 
-          height="380" 
-          frameborder="0" 
-          allowtransparency="true" 
-          allow="encrypted-media">
-        </iframe>
-      )}
-      <iframe
-  title="Spotify Embed: Recommendation Playlist "
-  src={`https://open.spotify.com/embed/playlist/6sqWRIxB3t9IrJoWidR6yU?utm_source=generator&theme=0`}
-  width="100%"
-  height="100%"
-  style={{ minHeight: '360px' }}
-  frameBorder="0"
-  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-  loading="lazy"
-/>
+    <div className={styles.container}>
+      <Header />
+      <MainContent
+        searchResults={searchResults}
+        addTrackToPlaylist={addTrackToPlaylist}
+        updateSearchResults={updateSearchResults}
+        playlistName={playlistName}
+        playlistTracks={playlistTracks}
+        updatePlaylistName={updatePlaylistName}
+        removeTrackFromPlaylist={removeTrackFromPlaylist}
+        playlistURIs={playlistURIs}
+        savePlaylist={savePlaylist}
+        updateTopTracks={updateTopTracks}
+        topTracks={topTracks}
+        updateRecommendedTracks={updateRecommendedTracks}
+        recommendedTracks={recommendedTracks}
+      />
+      <Player currentTrack={currentTrack} newPlaylist={newPlaylist} />
     </div>
   );
 }
-
