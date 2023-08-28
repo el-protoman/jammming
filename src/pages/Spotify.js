@@ -22,7 +22,7 @@ class Spotify extends Component {
       window.history.pushState("Access Token", null, "/");
       return this.accessToken;
     } else {
-      const accessUrl = `https://accounts.spotify.com/authorize?client_id=${this.clientId}&response_type=token&scope=playlist-modify-public&redirect_uri=${this.redirectUri}`;
+      const accessUrl = `https://accounts.spotify.com/authorize?client_id=${this.clientId}&response_type=token&scope=playlist-modify-public%20playlist-modify-private%20user-top-read&redirect_uri=${this.redirectUri}`;
       window.location = accessUrl;
     }
   }
