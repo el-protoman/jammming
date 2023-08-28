@@ -49,6 +49,25 @@ class Spotify extends Component {
       });
   }
 
+  async fetchWebApi(endpoint, method, body) {
+    const accessToken = this.getAccessToken();
+    const res = await fetch(`https://api.spotify.com/${endpoint}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      method,
+      body: JSON.stringify(body),
+    });
+    return await res.json();
+  }
+
+  async getTopTracks() {
+    const response = await this.fetchWebApi(
+      'v1/me/top/tracks?time_range=short_term&limit=5', 'GET'
+    );
+    return response.items;
+  }
+
   savePlaylist(name, trackUris) {
     if (!name || !trackUris.length) {
       return;

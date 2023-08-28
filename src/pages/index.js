@@ -13,14 +13,20 @@ export default function App() {
   // Initialize state for search results
   
   const [searchResults, setSearchResults] = useState([]);
-    const [playlistName, setPlaylistName] = useState('My Playlist');
+  const [playlistName, setPlaylistName] = useState('My Playlist');
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [playlistURIs, setPlaylistURIs] = useState([]);
+  const [topTracks, setTopTracks] = useState([]);
+
 
   // Fetch initial data when the component mounts
   useEffect(() => {
     // Fetch some initial data using a default search term or an empty term
     updateSearchResults('');
+  }, []);
+
+  useEffect(() => {
+    updateTopTracks();
   }, []);
 
   // Function to update search results
@@ -66,6 +72,11 @@ export default function App() {
         // Handle the error as needed
       });
   };
+
+  const updateTopTracks = async () => {
+    const tracks = await spotify.getTopTracks();
+    setTopTracks(tracks);
+  };
   
   return (
     <div className={styles.main}>
@@ -82,6 +93,16 @@ export default function App() {
         />
       </div>
       <button onClick={savePlaylist}>SAVE TO SPOTIFY</button>
+      <button onClick={updateTopTracks}>Get Top Tracks</button>
+      <div className={styles.topTracks}>
+        <h3>Top Tracks</h3>
+        <ul>
+          {topTracks.map(track => (
+            <li key={track.id}>{track.name}</li>
+          ))}
+        </ul>
+      </div>
+
     </div>
   );
 }
