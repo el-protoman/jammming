@@ -26,6 +26,14 @@ export default function App() {
     updateSearchResults('');
   }, []);
 
+  useEffect(() => {
+    // Set current track as the URI of the first in the list of recommended tracks
+    if (recommendedTracks.length > 0) {
+      setCurrentTrack(recommendedTracks[0].uri);
+    }
+  }, [recommendedTracks]);
+
+
   // Function to update search results
   const updateSearchResults = async (term) => {
     const newResults = await spotify.search(term);
@@ -128,6 +136,16 @@ export default function App() {
           allow="encrypted-media">
         </iframe>
       )}
+      <iframe
+  title="Spotify Embed: Recommendation Playlist "
+  src={`https://open.spotify.com/embed/playlist/6sqWRIxB3t9IrJoWidR6yU?utm_source=generator&theme=0`}
+  width="100%"
+  height="100%"
+  style={{ minHeight: '360px' }}
+  frameBorder="0"
+  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+  loading="lazy"
+/>
     </div>
   );
 }
