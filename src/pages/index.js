@@ -78,6 +78,7 @@ export default function App() {
   const updateRecommendedTracks = async () => {
     const recTracks = await spotify.getRecommendations(topTracks.map(track => track.id));
     setRecommendedTracks(recTracks);
+    console.log(recTracks)
   };
   
   return (
@@ -111,7 +112,7 @@ export default function App() {
           {recommendedTracks.map(track => (
             <li key={track.id}>
               {`${track.name} by ${track.artists.map(artist => artist.name).join(', ')}`}
-              <button onClick={() => addTrackToPlaylist(track)}>Add to Playlist</button>
+              <button onClick={() => addTrackToPlaylist(track)}>Add</button>
             </li>
           ))}
         </ul>

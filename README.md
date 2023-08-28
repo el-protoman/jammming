@@ -53,6 +53,7 @@ Add and remove songs to playlist
 Save playlist to spotify
 
 ## Future work
++add exception handling for get recommendations when empty tracklist
 +Cleanup the frontend and make more user friendly
 +Display top tracks and recommended tracks as tracklist and track components with add to playlist feature
 +add feature to add recommended tracks based on selected playlist tracks
