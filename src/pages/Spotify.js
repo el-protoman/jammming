@@ -68,6 +68,12 @@ class Spotify extends Component {
     return response.items;
   }
 
+  async getRecommendations(topTracksIds) {
+    return (await this.fetchWebApi(
+      `v1/recommendations?limit=5&seed_tracks=${topTracksIds.join(',')}`, 'GET'
+    )).tracks;
+  }
+
   savePlaylist(name, trackUris) {
     if (!name || !trackUris.length) {
       return;

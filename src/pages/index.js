@@ -17,16 +17,12 @@ export default function App() {
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [playlistURIs, setPlaylistURIs] = useState([]);
   const [topTracks, setTopTracks] = useState([]);
-
+  const [recommendedTracks, setRecommendedTracks] = useState([]);
 
   // Fetch initial data when the component mounts
   useEffect(() => {
     // Fetch some initial data using a default search term or an empty term
     updateSearchResults('');
-  }, []);
-
-  useEffect(() => {
-    updateTopTracks();
   }, []);
 
   // Function to update search results
@@ -77,6 +73,11 @@ export default function App() {
     const tracks = await spotify.getTopTracks();
     setTopTracks(tracks);
   };
+
+  const updateRecommendedTracks = async () => {
+    const recTracks = await getRecommendations(topTracks.map(track => track.id));
+    setRecommendedTracks(recTracks);
+  };
   
   return (
     <div className={styles.main}>
@@ -99,6 +100,18 @@ export default function App() {
         <ul>
           {topTracks.map(track => (
             <li key={track.id}>{track.name}</li>
+          ))}
+        </ul>
+      </div>
+      <button onClick={updateRecommendedTracks}>Get Recommendations</button>
+      <div className={styles.recommendedTracks}>
+        <h3>Recommended Tracks</h3>
+        <ul>
+          {recommendedTracks.map(track => (
+            <li key={track.id}>
+              {`${track.name} by ${track.artists.map(artist => artist.name).join(', ')}`}
+              <button onClick={() => addTrackToPlaylist(track)}>Add to Playlist</button>
+            </li>
           ))}
         </ul>
       </div>

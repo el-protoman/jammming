@@ -53,5 +53,7 @@ Add and remove songs to playlist
 Save playlist to spotify
 
 ## Future work
-Cleanup the frontend and make more user friendly
-Implement api for getting top 5 tracks of last 30 days, reccommend 5 songs based on top tracks, listen to songs in web app player
++Cleanup the frontend and make more user friendly
++Display top tracks and recommended tracks as tracklist and track components with add to playlist feature
++add feature to add recommended tracks based on selected playlist tracks
++Implement api for listening to songs in web app player
