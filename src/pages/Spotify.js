@@ -4,7 +4,7 @@ class Spotify extends Component {
   constructor(props) {
     super(props);
     this.clientId = "046c082b14bc41eebf0a85ab6b7ba350";
-    this.redirectUri = process.env.DEV ? "https://jammming-dev.vercel.app/" : "http://localhost:3000";
+    this.redirectUri = process.env.DEV ? "http://localhost:3000" : "https://jammming-dev.vercel.app/";
     this.accessToken = null;
   }
 
