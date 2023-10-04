@@ -101,7 +101,7 @@ class Spotify extends Component {
                 method: "POST",
                 body: JSON.stringify({ uris: trackUris }),
               }
-            ).then(()=> playlistId);
+            ).then(() => playlistId);
           });
       });
   }

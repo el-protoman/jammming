@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { TextField, Typography, List, ListItem, ListItemText } from '@material-ui/core';
 import styles from '../styles/Components.module.css';
 import Tracklist from './Tracklist';
 
@@ -17,21 +18,23 @@ function Playlist({ playlistName, playlistTracks, onRemove, playlistURIs, onName
 
   return (
     <div className={styles.playlist}>
-      <h2>
-        <input
+      <Typography variant="h2">
+        <TextField
           type="text"
           value={updatedPlaylistName} // Use updatedPlaylistName here
           onChange={handlePlaylistNameChange} // Update the function name
-          />
-      </h2>
+        />
+      </Typography>
       <Tracklist tracks={playlistTracks} onRemove={handleRemoveTrack} /> {/* Use handleRemoveTrack here */}
       <div className={styles.playlistURIs}>
-        <h3>Playlist URIs added:</h3>
-        <ul>
-        {playlistURIs.map(uri => (
-  <li key={uri}>{uri}</li>
-))}
-        </ul>
+        <Typography variant="h3">Playlist URIs added:</Typography>
+        <List>
+          {playlistURIs.map(uri => (
+            <ListItem key={uri}>
+              <ListItemText primary={uri} />
+            </ListItem>
+          ))}
+        </List>
       </div>
     </div>
   );

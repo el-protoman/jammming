@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { TextField, Button } from '@material-ui/core';
 import styles from '../styles/Components.module.css';
 
 // SearchBar component
@@ -10,14 +11,19 @@ const SearchBar = ({ onSearch }) => {
   };
 
   return (
-    <div>
-      <input 
-        type="text" 
-        placeholder="Enter A Song, Album, or Artist" 
+    <div className={styles.searchBar}>
+      <TextField
+        type="text"
+        label="Enter A Song, Album, or Artist"
         value={searchTerm}
         onChange={event => setSearchTerm(event.target.value)}
+        InputProps={{
+          classes: {
+            input: styles.searchInput
+          }
+        }}
       />
-      <button onClick={handleSearch}>SEARCH</button>
+      <Button variant="contained" color="primary" onClick={handleSearch}>SEARCH</Button>
     </div>
   );
 };
