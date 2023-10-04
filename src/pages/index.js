@@ -30,11 +30,25 @@ export default function App() {
     }
   }, [recommendedTracks]);
 
+  useEffect(() => {
+    const uris = playlistTracks.map((track) => track.uri);
+    setPlaylistURIs(uris);
+  }, [playlistTracks]);
+
   const addTrackToPlaylist = (track) => {
     if (!playlistTracks.some((t) => t.id === track.id)) {
       setPlaylistTracks([...playlistTracks, track]);
     }
   };
+
+  // logging track updates
+  useEffect(() => {
+    console.log('Playlist tracks', playlistTracks);
+  }, [playlistTracks]);
+
+  useEffect(() => {
+    console.log('Playlist uris', playlistURIs);
+  }, [playlistURIs]);
 
   const updateSearchResults = async (term) => {
     const newResults = await spotify.search(term);
@@ -51,13 +65,11 @@ export default function App() {
   };
 
   const savePlaylist = () => {
-    const uris = playlistTracks.map((track) => track.uri);
-    setPlaylistURIs(uris);
     if (!playlistName) {
       return;
     }
     spotify
-      .savePlaylist(playlistName, uris)
+      .savePlaylist(playlistName, playlistURIs)
       .then((playlistId) => {
         setPlaylistTracks([]);
         setPlaylistName('New Playlist');
@@ -75,9 +87,25 @@ export default function App() {
   };
 
   const updateRecommendedTracks = async () => {
-    if (topTracks.length > 0) {
-      const recTracks = await spotify.getRecommendations(topTracks.map((track) => track.id));
-      setRecommendedTracks(recTracks);
+    try {
+      if (topTracks.length > 0) {
+        const recTracks = await spotify.getRecommendations(topTracks.map((track) => track.id));
+        setRecommendedTracks(recTracks);
+      }
+    } catch (error) {
+      console.error('Error updating recommended tracks:', error);
+    }
+  };
+
+  const updateRecommendedTracksPlaylist = async () => {
+    try {
+      if (playlistTracks.length > 0) {
+        const recTracks = await spotify.getRecommendations(playlistTracks.map((track) => track.id));
+        setRecommendedTracks(recTracks);
+        console.log('playlist rec tracks', recTracks);
+      }
+    } catch (error) {
+      console.error('Error updating recommended tracks based on playlist:', error);
     }
   };
 
@@ -97,6 +125,7 @@ export default function App() {
         updateTopTracks={updateTopTracks}
         topTracks={topTracks}
         updateRecommendedTracks={updateRecommendedTracks}
+        updateRecommendedTracksPlaylist={updateRecommendedTracksPlaylist}
         recommendedTracks={recommendedTracks}
       />
       <Player currentTrack={currentTrack} newPlaylist={newPlaylist} />
