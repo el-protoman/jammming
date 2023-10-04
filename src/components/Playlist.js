@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Typography, List, ListItem, ListItemText } from '@material-ui/core';
+import { TextField, Typography, List, ListItem, ListItemText } from '@mui/material';
 import styles from '../styles/Components.module.css';
 import Tracklist from './Tracklist';
 

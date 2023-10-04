@@ -5,7 +5,7 @@ import SearchResults from '../components/SearchResults';
 import Playlist from '../components/Playlist';
 import Tracklist from '../components/Tracklist';
 import styles from '../styles/Home.module.css';
-import { Button, Grid } from '@material-ui/core';
+import { Button, Grid } from '@mui/material';
 
 const MainContent = ({
   searchResults,

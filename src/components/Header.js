@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from '../styles/Home.module.css';
-import { AppBar, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Toolbar, Typography } from '@mui/material';
 
 const Header = () => {
   return (
