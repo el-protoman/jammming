@@ -100,7 +100,7 @@ export default function App() {
   const updateRecommendedTracksPlaylist = async () => {
     try {
       if (playlistTracks.length > 0) {
-        const recTracks = await spotify.getRecommendations(playlistTracks.map((track) => track.id));
+        const recTracks = await spotify.getRecommendations(playlistTracks.map((track) => track.id), playlistTracks.length);
         setRecommendedTracks(recTracks);
         console.log('playlist rec tracks', recTracks);
       }

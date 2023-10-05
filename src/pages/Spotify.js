@@ -68,9 +68,9 @@ class Spotify extends Component {
     return response.items;
   }
 
-  async getRecommendations(topTracksIds) {
+  async getRecommendations(topTracksIds, limit = 5) {
     return (await this.fetchWebApi(
-      `v1/recommendations?limit=5&seed_tracks=${topTracksIds.join(',')}`, 'GET'
+      `v1/recommendations?limit=${limit}&seed_tracks=${topTracksIds.join(',')}`, 'GET'
     )).tracks;
   }
 
