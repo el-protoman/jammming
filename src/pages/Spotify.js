@@ -69,8 +69,12 @@ class Spotify extends Component {
   }
 
   async getRecommendations(topTracksIds, limit = 5) {
+    const randomTracks = topTracksIds.sort(() => 0.5 - Math.random()).slice(0, 5);
+    if (limit > 100) {
+      limit = 100;
+    }
     return (await this.fetchWebApi(
-      `v1/recommendations?limit=${limit}&seed_tracks=${topTracksIds.join(',')}`, 'GET'
+      `v1/recommendations?limit=${limit}&seed_tracks=${randomTracks.join(',')}`, 'GET'
     )).tracks;
   }
 
